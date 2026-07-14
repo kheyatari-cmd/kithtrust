@@ -1,0 +1,92 @@
+name: Deploy — Main Branch
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: "20"
+
+jobs:
+  # =========================================================================
+  # Build & Deploy Frontend
+  # =========================================================================
+  deploy-frontend:
+    name: Deploy Frontend
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        run: npm run build
+        env:
+          NEXT_PUBLIC_STELLAR_NETWORK: testnet
+          NEXT_PUBLIC_STELLAR_RPC_URL: https://soroban-testnet.stellar.org
+          NEXT_PUBLIC_STELLAR_NETWORK_PASSPHRASE: "Test SDF Network ; September 2015"
+          NEXT_PUBLIC_GOVERNANCE_CONTRACT_ID: ${{ vars.GOVERNANCE_CONTRACT_ID }}
+          NEXT_PUBLIC_VAULT_CONTRACT_ID: ${{ vars.VAULT_CONTRACT_ID }}
+          NEXT_PUBLIC_EXPLORER_URL: https://stellar.expert/explorer/testnet
+
+      # Deploy to Vercel (requires VERCEL_TOKEN secret)
+      # Uncomment and configure when ready:
+      # - name: Deploy to Vercel
+      #   uses: amondnet/vercel-action@v25
+      #   with:
+      #     vercel-token: ${{ secrets.VERCEL_TOKEN }}
+      #     vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+      #     vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+      #     working-directory: frontend
+
+  # =========================================================================
+  # Build Contract WASMs (for reference / artifact)
+  # =========================================================================
+  build-contracts:
+    name: Build Contracts
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: contracts
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+
+      - name: Cache Cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            contracts/target
+          key: ${{ runner.os }}-cargo-deploy-${{ hashFiles('contracts/**/Cargo.lock') }}
+
+      - name: Build release WASMs
+        run: cargo build --release --target wasm32-unknown-unknown
+
+      - name: Upload WASM artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: contract-wasms
+          path: contracts/target/wasm32-unknown-unknown/release/*.wasm
+          retention-days: 30
