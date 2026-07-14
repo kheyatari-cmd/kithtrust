@@ -374,16 +374,16 @@ npx vercel --prod
 
 | Contract | Address | Explorer |
 |---|---|---|
-| **Governance** | `<DEPLOY_AND_PASTE_HERE>` | [View on Explorer](#) |
-| **Vault** | `<DEPLOY_AND_PASTE_HERE>` | [View on Explorer](#) |
+| **Governance** | `CC5JMWWNW5WURTTPQ2G4AJCDDXXOD5KCJNHTFQKGFG52FFOVTCOJ726C` | [View on Explorer](https://stellar.expert/explorer/testnet/contract/CC5JMWWNW5WURTTPQ2G4AJCDDXXOD5KCJNHTFQKGFG52FFOVTCOJ726C) |
+| **Vault** | `CARJ5RQ37RM66GY635ILROUKZH25IEWP3DP5KMDKS7L64Q3C2NCBWLFH` | [View on Explorer](https://stellar.expert/explorer/testnet/contract/CARJ5RQ37RM66GY635ILROUKZH25IEWP3DP5KMDKS7L64Q3C2NCBWLFH) |
 
 ### Transaction Hashes
 
 | Action | Hash | Explorer |
 |---|---|---|
-| Governance Deploy | `<PASTE_TX_HASH>` | [View](#) |
-| Vault Deploy | `<PASTE_TX_HASH>` | [View](#) |
-| Initialize | `<PASTE_TX_HASH>` | [View](#) |
+| Governance Init | `ba73737e163b2ba08894512eb7838ebabde4c0bce2d6712d2f0314ac5716141f` | [View](https://stellar.expert/explorer/testnet/tx/ba73737e163b2ba08894512eb7838ebabde4c0bce2d6712d2f0314ac5716141f) |
+| Vault Init | `88f8e20cbac0700823b493a3f13c17f00c34c7ea36f128e0fb7dbdb76b83a2e9` | [View](https://stellar.expert/explorer/testnet/tx/88f8e20cbac0700823b493a3f13c17f00c34c7ea36f128e0fb7dbdb76b83a2e9) |
+| Vault Link | `c06897bf0e4e012adb1c52e54e78b78f2f1eb81f96f17b6dcff34c3b837bf07c` | [View](https://stellar.expert/explorer/testnet/tx/c06897bf0e4e012adb1c52e54e78b78f2f1eb81f96f17b6dcff34c3b837bf07c) |
 
 ---
 
