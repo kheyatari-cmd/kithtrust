@@ -27,9 +27,23 @@ export async function fetchContractEvents(
   }
 
   try {
+    let resolvedStartLedger = startLedger;
+    if (!resolvedStartLedger) {
+      try {
+        const latestLedgerResp = await server.getLatestLedger();
+        // Look back up to 10000 ledgers (around 13 hours) to find recent events
+        resolvedStartLedger = Math.max(1, latestLedgerResp.sequence - 10000);
+      } catch (ledgerErr) {
+        logger.warn("Failed to fetch latest ledger sequence for event query, falling back to sequence 1", {
+          error: ledgerErr instanceof Error ? ledgerErr.message : String(ledgerErr),
+        });
+        resolvedStartLedger = 1;
+      }
+    }
+
     for (const contractId of contractIds) {
       const response = await server.getEvents({
-        startLedger: startLedger || 0,
+        startLedger: resolvedStartLedger,
         filters: [
           {
             type: "contract",
@@ -55,7 +69,7 @@ export async function fetchContractEvents(
 
     logger.debug("Fetched contract events", { count: events.length });
   } catch (error) {
-    logger.error("Failed to fetch contract events", {
+    logger.warn("Failed to fetch contract events from Soroban RPC, falling back to mock data", {
       error: error instanceof Error ? error.message : String(error),
     });
   }
