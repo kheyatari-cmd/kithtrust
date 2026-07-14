@@ -2,7 +2,7 @@
 
 use super::*;
 use soroban_sdk::{testutils::Address as _, Address, Env};
-use types::{ClaimableBalance, VaultBalance};
+use types::ClaimableBalance;
 
 // ============================================================================
 // Since the Vault contract uses inter-contract calls to the Governance contract
@@ -11,7 +11,7 @@ use types::{ClaimableBalance, VaultBalance};
 // full integration flow.
 // ============================================================================
 
-fn setup_vault(env: &Env) -> (Address, Address, VaultContractClient) {
+fn setup_vault(env: &Env) -> (Address, Address, VaultContractClient<'_>) {
     let contract_id = env.register(VaultContract, ());
     let client = VaultContractClient::new(env, &contract_id);
     let admin = Address::generate(env);

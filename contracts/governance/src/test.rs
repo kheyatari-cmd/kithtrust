@@ -4,14 +4,14 @@ use super::*;
 use soroban_sdk::{testutils::Address as _, Address, Env, String};
 use types::{AllowanceInterval, Role};
 
-fn setup_contract(env: &Env) -> (Address, GovernanceContractClient) {
+fn setup_contract(env: &Env) -> (Address, GovernanceContractClient<'_>) {
     let contract_id = env.register(GovernanceContract, ());
     let client = GovernanceContractClient::new(env, &contract_id);
     let admin = Address::generate(env);
     (admin, client)
 }
 
-fn initialize_contract(env: &Env) -> (Address, Address, GovernanceContractClient) {
+fn initialize_contract(env: &Env) -> (Address, Address, GovernanceContractClient<'_>) {
     let (admin, client) = setup_contract(env);
 
     env.mock_all_auths();
@@ -66,7 +66,7 @@ fn test_double_initialize_fails() {
 #[test]
 fn test_add_parent_and_child() {
     let env = Env::default();
-    let (admin, parent, client) = initialize_contract(&env);
+    let (_admin, parent, client) = initialize_contract(&env);
 
     // Parent role should be set
     let role = client.get_role(&parent);
