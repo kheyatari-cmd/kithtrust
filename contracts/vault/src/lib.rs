@@ -12,7 +12,9 @@ use errors::VaultError;
 use storage::{DataKey, INSTANCE_TTL, INSTANCE_TTL_BUMP, PERSISTENT_TTL, PERSISTENT_TTL_BUMP};
 use types::{ClaimableBalance, VaultBalance};
 
-use soroban_sdk::{contract, contractimpl, contracttype, vec, Address, BytesN, Env, IntoVal, Symbol};
+use soroban_sdk::{
+    contract, contractimpl, contracttype, vec, Address, BytesN, Env, IntoVal, Symbol,
+};
 
 /// AuthorizationResult type — mirrors the Governance contract's return type
 /// for the is_distribution_authorized cross-contract call.
@@ -46,9 +48,7 @@ impl VaultContract {
         admin.require_auth();
 
         env.storage().instance().set(&DataKey::Admin, &admin);
-        env.storage()
-            .instance()
-            .set(&DataKey::Initialized, &true);
+        env.storage().instance().set(&DataKey::Initialized, &true);
         env.storage()
             .instance()
             .set(&DataKey::GovernanceContract, &governance_contract);
@@ -115,11 +115,7 @@ impl VaultContract {
 
     /// Distribute allowance from parent vault to child.
     /// Makes a cross-contract call to the Governance contract to verify authorization.
-    pub fn distribute(
-        env: Env,
-        parent: Address,
-        child: Address,
-    ) -> Result<i128, VaultError> {
+    pub fn distribute(env: Env, parent: Address, child: Address) -> Result<i128, VaultError> {
         Self::require_initialized(&env)?;
         parent.require_auth();
 
@@ -137,7 +133,11 @@ impl VaultContract {
         let auth_result: AuthorizationResult = env.invoke_contract(
             &governance_addr,
             &Symbol::new(&env, "is_distribution_authorized"),
-            vec![&env, parent.clone().into_val(&env), child.clone().into_val(&env)],
+            vec![
+                &env,
+                parent.clone().into_val(&env),
+                child.clone().into_val(&env),
+            ],
         );
 
         if !auth_result.authorized {

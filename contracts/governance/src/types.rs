@@ -22,9 +22,9 @@ impl AllowanceInterval {
     /// Returns the interval duration in seconds
     pub fn to_seconds(&self) -> u64 {
         match self {
-            AllowanceInterval::Weekly => 7 * 24 * 60 * 60,       // 604800
-            AllowanceInterval::Biweekly => 14 * 24 * 60 * 60,    // 1209600
-            AllowanceInterval::Monthly => 30 * 24 * 60 * 60,     // 2592000
+            AllowanceInterval::Weekly => 7 * 24 * 60 * 60, // 604800
+            AllowanceInterval::Biweekly => 14 * 24 * 60 * 60, // 1209600
+            AllowanceInterval::Monthly => 30 * 24 * 60 * 60, // 2592000
         }
     }
 }

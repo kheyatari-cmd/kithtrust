@@ -1,11 +1,9 @@
-use soroban_sdk::{Address, Env, Symbol, symbol_short};
+use soroban_sdk::{symbol_short, Address, Env, Symbol};
 
 /// Emit event when the contract is initialized
 pub fn emit_initialized(env: &Env, admin: &Address) {
-    env.events().publish(
-        (symbol_short!("init"),),
-        admin.clone(),
-    );
+    env.events()
+        .publish((symbol_short!("init"),), admin.clone());
 }
 
 /// Emit event when a parent is added
@@ -42,16 +40,12 @@ pub fn emit_allowance_updated(env: &Env, parent: &Address, child: &Address, amou
 
 /// Emit event when a family is paused/unpaused
 pub fn emit_family_paused(env: &Env, parent: &Address, paused: bool) {
-    env.events().publish(
-        (Symbol::new(env, "fam_pause"),),
-        (parent.clone(), paused),
-    );
+    env.events()
+        .publish((Symbol::new(env, "fam_pause"),), (parent.clone(), paused));
 }
 
 /// Emit event when vault contract is linked
 pub fn emit_vault_linked(env: &Env, vault: &Address) {
-    env.events().publish(
-        (Symbol::new(env, "vault_link"),),
-        vault.clone(),
-    );
+    env.events()
+        .publish((Symbol::new(env, "vault_link"),), vault.clone());
 }

@@ -39,9 +39,7 @@ impl GovernanceContract {
         // Store admin and initialization flag
         env.storage().instance().set(&DataKey::Admin, &admin);
         env.storage().instance().set(&DataKey::Initialized, &true);
-        env.storage()
-            .instance()
-            .set(&DataKey::GlobalPaused, &false);
+        env.storage().instance().set(&DataKey::GlobalPaused, &false);
         env.storage()
             .instance()
             .set(&DataKey::MaxChildren, &MAX_CHILDREN_DEFAULT);
@@ -81,11 +79,7 @@ impl GovernanceContract {
     // ========================================================================
 
     /// Register a new parent. Admin only.
-    pub fn add_parent(
-        env: Env,
-        parent: Address,
-        name: String,
-    ) -> Result<(), GovernanceError> {
+    pub fn add_parent(env: Env, parent: Address, name: String) -> Result<(), GovernanceError> {
         let admin = Self::require_admin(&env)?;
         admin.require_auth();
 
@@ -235,11 +229,7 @@ impl GovernanceContract {
     }
 
     /// Remove a child from a parent's family. Parent only.
-    pub fn remove_child(
-        env: Env,
-        parent: Address,
-        child: Address,
-    ) -> Result<(), GovernanceError> {
+    pub fn remove_child(env: Env, parent: Address, child: Address) -> Result<(), GovernanceError> {
         Self::require_initialized(&env)?;
         parent.require_auth();
         Self::require_role(&env, &parent, &Role::Parent)?;
@@ -351,7 +341,12 @@ impl GovernanceContract {
     // ========================================================================
 
     /// Pause or unpause a family's allowance distributions. Parent or Admin only.
-    pub fn pause_family(env: Env, caller: Address, parent: Address, paused: bool) -> Result<(), GovernanceError> {
+    pub fn pause_family(
+        env: Env,
+        caller: Address,
+        parent: Address,
+        paused: bool,
+    ) -> Result<(), GovernanceError> {
         Self::require_initialized(&env)?;
         caller.require_auth();
 
@@ -475,9 +470,7 @@ impl GovernanceContract {
 
     /// Get the role of an address
     pub fn get_role(env: Env, addr: Address) -> Option<Role> {
-        env.storage()
-            .persistent()
-            .get(&DataKey::Role(addr))
+        env.storage().persistent().get(&DataKey::Role(addr))
     }
 
     /// Get the list of children for a parent
@@ -514,9 +507,7 @@ impl GovernanceContract {
 
     /// Get the parent of a child
     pub fn get_parent_of(env: Env, child: Address) -> Option<Address> {
-        env.storage()
-            .persistent()
-            .get(&DataKey::ParentOf(child))
+        env.storage().persistent().get(&DataKey::ParentOf(child))
     }
 
     // ========================================================================
@@ -537,11 +528,7 @@ impl GovernanceContract {
     // ========================================================================
 
     fn require_initialized(env: &Env) -> Result<(), GovernanceError> {
-        if !env
-            .storage()
-            .instance()
-            .has(&DataKey::Initialized)
-        {
+        if !env.storage().instance().has(&DataKey::Initialized) {
             return Err(GovernanceError::NotInitialized);
         }
         env.storage()
