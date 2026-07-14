@@ -8,7 +8,6 @@ import {
   Shield,
   Wallet,
   Globe,
-  Bell,
   Copy,
   Check,
   ExternalLink,

@@ -1,9 +1,7 @@
 "use client";
 
 import { useWallet } from "@/features/wallet/hooks/use-wallet";
-import { useFamilyStore } from "@/features/family/store";
 import {
-  Wallet,
   Users,
   ArrowUpRight,
   ArrowDownRight,
@@ -80,7 +78,7 @@ const statCards = [
 ];
 
 export default function DashboardPage() {
-  const { isConnected, address } = useWallet();
+  const { isConnected } = useWallet();
 
   return (
     <div className="space-y-6 animate-fade-in">

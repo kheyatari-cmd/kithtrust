@@ -1,14 +1,11 @@
 "use client";
 
 import {
-  BarChart3,
   TrendingUp,
   PieChart,
   ArrowUpRight,
   ArrowDownRight,
   Coins,
-  Users,
-  Calendar,
 } from "lucide-react";
 
 // Mock analytics data
